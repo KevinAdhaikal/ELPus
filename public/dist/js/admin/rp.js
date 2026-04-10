@@ -1,0 +1,1 @@
+const roles_table = $("#roles_table").DataTable();
