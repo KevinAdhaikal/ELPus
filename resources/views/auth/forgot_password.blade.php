@@ -22,22 +22,80 @@
     </div>
     <div class="card-body">
       <p class="login-box-msg">You forgot your password? Here you can easily retrieve a new password.</p>
-      <form action="recover-password.html" method="post">
-        <div class="input-group mb-3">
-          <input type="email" class="form-control" placeholder="Email">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-envelope"></span>
+      @if(session('success'))
+          <div class="alert alert-success">
+              {{ session('success') }}
+          </div>
+      @elseif ($errors->any())
+          <div class="alert alert-danger">
+              {{ $errors->first() }}
+          </div>
+      @elseif(session('error'))
+          <div class="alert alert-danger">
+              {{ session('error') }}
+          </div>
+      @endif
+
+      @if(!session("code_sended"))
+        <form action="{{ route('req_reset_code') }}" method="post">
+          @csrf
+          <div class="input-group mb-3">
+            <input type="email" name="email" value="{{ old('email', '') }}" class="form-control" placeholder="Email">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <button type="submit" class="btn btn-primary btn-block">Request new password</button>
+          <div class="row">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Send reset password code</button>
+            </div>
+            <!-- /.col -->
           </div>
-          <!-- /.col -->
-        </div>
-      </form>
+        </form>
+      @else
+        <form action="{{ route('forgot_password') }}" method="post">
+          <div class="input-group mb-3">
+            <input type="email" class="form-control" name="email" value="{{ session('code_sended') }}" placeholder="Email" readonly>
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" name="ver_code" value="{{ old('ver_code', '') }}" placeholder="Verify Code">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-key"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" name="new_pass" value="{{ old('new_pass', '') }}" placeholder="New Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="input-group mb-3">
+            <input type="password" class="form-control" name="new_pass_confirmation" value="{{ old('new_pass_confirmation', '') }}" placeholder="Confirm New Password">
+            <div class="input-group-append">
+              <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-12">
+              <button type="submit" class="btn btn-primary btn-block">Change Password</button>
+            </div>
+            <!-- /.col -->
+          </div>
+        </form>
+      @endif
       <p class="mt-3 mb-1">
         <a href="{{ route('login') }}"><-- Back to Login</a>
       </p>

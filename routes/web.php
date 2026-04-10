@@ -24,6 +24,9 @@ Route::post('/register',[AuthController::class,'register'])->name('register');
 Route::get('/forgot_password',[AuthController::class,'forgotPasswordPage'])->name('forgot_password');
 Route::post('/forgot_password',[AuthController::class,'forgotPassword'])->name('forgot_password');
 
+// Request Reset Code routes
+Route::post('/req_reset_code', [AuthController::class, 'requestResetCode'])->name('req_reset_code');
+
 // logout routes
 Route::get('/logout',[AuthController::class,'logout'])->name('logout');
 
@@ -34,6 +37,7 @@ Route::get('/dashboard',[DashboardController::class,'dashboardPage'])->name('das
 Route::get('/profile',[ProfileController::class,'profilePage'])->name('profile');
 Route::post('/profile', [ProfileController::class, 'profile'])->name('profile');
 
+// change password routes
 Route::post('/change_password', [ProfileController::class, 'change_password'])->name('change_password');
 
 // admin users
