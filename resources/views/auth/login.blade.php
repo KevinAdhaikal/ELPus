@@ -25,39 +25,54 @@
     </div>
     <div class="card-body">
       <p class="login-box-msg">Sign in to start your session</p>
-
+      @if(session('error'))
+          <div class="alert alert-danger">
+              {{ session('error') }}
+          </div>
+      @endif
+      @if(session('success'))
+          <div class="alert alert-success">
+              {{ session('success') }}
+          </div>
+      @endif
       <form action="{{ route('login') }}" method="post">
-        <div class="input-group mb-3">
-          <input type="text" name="login_input" class="form-control" placeholder="Username / Email">
+        <div class="input-group mb-1">
+          <input 
+            type="text" 
+            name="username_or_email" 
+            class="form-control @error('username_or_email') is-invalid @enderror" 
+            placeholder="Username / Email"
+            value="{{ old('username_or_email') }}"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+        @error('username_or_email')
+          <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        <div class="input-group mb-1 mt-3">
+          <input 
+            type="password" 
+            name="password" 
+            class="form-control @error('password') is-invalid @enderror" 
+            placeholder="Password"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-8">
-            <div class="icheck-primary">
-              <input type="checkbox" id="remember">
-              <label for="remember">
-                Remember Me
-              </label>
-            </div>
-          </div>
-          <!-- /.col -->
-          <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-          </div>
-          <!-- /.col -->
-        </div>
+        @error('password')
+          <small class="text-danger">{{ $message }}</small>
+          <br>
+        @enderror
+        <br>
+        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
       </form>
 
       <div class="divider text-center my-3">

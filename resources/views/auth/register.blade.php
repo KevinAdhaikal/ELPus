@@ -26,47 +26,104 @@
       <p class="login-box-msg">Create a new account</p>
       <form action="{{ route('register') }}" method="post">
         @csrf
-        <div class="input-group mb-3">
-          <input type="text" name="full_name" class="form-control" placeholder="Full name">
+
+        @if(session('error'))
+          <div class="alert alert-danger">
+            {{ session('error') }}
+          </div>
+        @endif
+
+        <div class="input-group mb-1">
+          <input 
+            type="text" 
+            name="full_name" 
+            class="form-control @error('full_name') is-invalid @enderror" 
+            placeholder="Full name"
+            value="{{ old('full_name') }}"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="text" name="username" class="form-control" placeholder="Username">
+        @error('full_name')
+          <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        <div class="input-group mb-1 mt-3">
+          <input 
+            type="text" 
+            name="username" 
+            class="form-control @error('username') is-invalid @enderror" 
+            placeholder="Username"
+            value="{{ old('username') }}"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+        @error('username')
+          <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        <div class="input-group mb-1 mt-3">
+          <input 
+            type="email" 
+            name="email" 
+            class="form-control @error('email') is-invalid @enderror" 
+            placeholder="Email"
+            value="{{ old('email') }}"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+        @error('email')
+          <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        <div class="input-group mb-1 mt-3">
+          <input 
+            type="password" 
+            name="password" 
+            class="form-control @error('password') is-invalid @enderror" 
+            placeholder="Password"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" name="confirm_password" class="form-control" placeholder="Confirm password">
+        @error('password')
+          <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        <div class="input-group mb-1 mt-3">
+          <input 
+            type="password" 
+            name="password_confirmation" 
+            class="form-control @error('password_confirmation') is-invalid @enderror" 
+            placeholder="Confirm password"
+          >
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Register</button>
+        @error('password_confirmation')
+          <small class="text-danger">{{ $message }}</small>
+        @enderror
+
+        <button type="submit" class="btn btn-primary btn-block mt-3">
+          Register
+        </button>
       </form>
 
       <div class="divider text-center my-3">

@@ -19,17 +19,17 @@ class AuthController extends Controller {
     
     public function login(Request $req) {
         $req->validate([
-            'login_input' => 'required',
+            'username_or_email' => 'required',
             'password' => 'required|min:8',
         ]);
 
-        $login_input = $req->input('login_input');
+        $username_or_email = $req->input(key: 'username_or_email');
         $password = $req->input('password');
 
-        $fieldType = filter_var($login_input, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+        $fieldType = filter_var($username_or_email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
         $credentials = [
-            $fieldType => $login_input,
+            $fieldType => $username_or_email,
             'password' => $password
         ];
 
@@ -37,14 +37,27 @@ class AuthController extends Controller {
             return redirect('/dashboard');
         }
 
-        return back()->with('error','Username / Email or Password is incorrect');
+        return redirect('login')->with('error','Username / Email or Password is incorrect');
     }
     public function register(Request $req) {
         $req->validate([
             'full_name' => 'required',
             'username' => 'required|unique:users,username',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
+            'password' => 'required|min:8|confirmed',
+            ], [
+            'full_name.required' => 'Full Name wajib diisi.',
+
+            'username.required' => 'Username wajib diisi.',
+            'username.unique' => 'Username sudah digunakan, silakan pilih username lain.',
+
+            'email.required' => 'Email wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email sudah terdaftar, silakan gunakan email lain.',
+
+            'password.required' => 'Password wajib diisi.',
+            'password.min' => 'Password minimal terdiri dari 8 karakter.',
+            'password.confirmed' => 'Konfirmasi password tidak sesuai.',
         ]);
         
         User::create([
@@ -54,7 +67,7 @@ class AuthController extends Controller {
             'password' => $req->input('password'),
         ])->save();
 
-        return redirect(to: '/login');
+        return redirect(to: '/login')->with('success', 'Akun berhasil dibuat! Silahkan login.');
     }
     public function forgotPassword(Request $req) {
         return redirect('/login');
