@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('profile_img')->default('default.svg');
+            $table->foreignId('role_id')->default(2)->constrained('roles')->cascadeOnDelete()->cascadeOnUpdate();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -36,6 +37,18 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
+
+        DB::table('users')->insert([
+            [
+                "full_name" => "Administrator",
+                "username" => "admin",
+                "email" => "admin@admin.com",
+                "password" => Hash::make("admin"),
+                "role_id" => 1,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        ]);
     }
 
     /**

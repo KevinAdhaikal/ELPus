@@ -195,7 +195,6 @@
                   <button type="submit" class="btn btn-primary"><i class="fa fa-key"></i> Change Password</button>
                 </div>
               </form>
-              
             </div>
           </div>
         </div>

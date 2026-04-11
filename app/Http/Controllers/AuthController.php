@@ -26,7 +26,7 @@ class AuthController extends Controller {
     public function login(Request $req) {
         $req->validate([
             'username_or_email' => 'required',
-            'password' => 'required|min:8',
+            'password' => 'required',
         ]);
 
         $username_or_email = $req->input(key: 'username_or_email');
@@ -114,31 +114,37 @@ class AuthController extends Controller {
         ]);
 
         if ($validator->fails()) {
-            return redirect('forgot_password')->withErrors($validator)->with('code_sended', $req->email);
+            return redirect('forgot_password')
+            ->withErrors($validator)
+            ->with('code_sended', $req->email);
         }
 
         $passwordReset = PasswordReset::where('email', $req->email)->where('ver_code', $req->ver_code)->first();
 
         if (!$passwordReset) {
-            return redirect('forgot_password')->with('error', "Kode verifikasi salah atau email tidak cocok.")->with('code_sended', $req->email);;
+            return redirect('forgot_password')
+            ->with('error', "Kode verifikasi salah atau email tidak cocok.")->with('code_sended', $req->email);;
         }
 
         $expirationTime = $passwordReset->created_at->addMinutes(5);
         if (now()->greaterThan($expirationTime)) {
             $passwordReset->delete();
-            return redirect('forgot_password')->with('error', "Kode verifikasi sudah kedaluwarsa. Silakan minta kode baru.");
+            return redirect('forgot_password')
+            ->with('error', "Kode verifikasi sudah kedaluwarsa. Silakan minta kode baru.");
         }
 
         $user = User::where('email', $req->email)->first();
 
-        if (!$user) return redirect('forgot_password')->with('error', "Email tidak ditemukan.");
+        if (!$user) return redirect('forgot_password')
+            ->with('error', "Email tidak ditemukan.");
 
         $user->password = Hash::make($req->new_pass);
         $user->save();
 
         $passwordReset->delete();
 
-        return redirect('login')->with('success', "Password berhasil di ganti! Silahkan login.");
+        return redirect('login')
+        ->with('success', "Password berhasil di ganti! Silahkan login.");
     }
 
     public function logout() {

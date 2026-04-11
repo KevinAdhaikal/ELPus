@@ -5,7 +5,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RPController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController; # this is for Auth Controller
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
     if (auth()->check()) return redirect()->route('dashboard');
@@ -28,20 +28,28 @@ Route::post('/forgot_password',[AuthController::class,'forgotPassword'])->name('
 Route::post('/req_reset_code', [AuthController::class, 'requestResetCode'])->name('req_reset_code');
 
 // logout routes
-Route::get('/logout',[AuthController::class,'logout'])->name('logout');
+Route::get('/logout',[AuthController::class,'logout'])->name('logout')->middleware('auth');
 
 // dashboard routes
-Route::get('/dashboard',[DashboardController::class,'dashboardPage'])->name('dashboard');
+Route::get('/dashboard',[DashboardController::class,'dashboardPage'])->name('dashboard')->middleware('auth');
 
 // profile routes
-Route::get('/profile',[ProfileController::class,'profilePage'])->name('profile');
-Route::post('/profile', [ProfileController::class, 'profile'])->name('profile');
+Route::get('/profile',[ProfileController::class,'profilePage'])->name('profile')->middleware('auth');
+Route::post('/profile', [ProfileController::class, 'profile'])->name('profile')->middleware('auth');
 
 // change password routes
-Route::post('/change_password', [ProfileController::class, 'change_password'])->name('change_password');
+Route::post('/change_password', [ProfileController::class, 'change_password'])->name('change_password')->middleware('auth');
 
 // admin users
-Route::get('/admin/users',[UsersController::class,'usersPage'])->name('admin.users');
+Route::get('/admin/users',[UsersController::class,'usersPage'])->name('admin.users')->middleware('auth');
+Route::get('/admin/user_by_id', [UsersController::class, 'userById'])->name('admin.user_by_id')->middleware('auth');
+Route::post('/admin/user', [UsersController::class, 'userCreate'])->name('admin.user')->middleware('auth');
+Route::patch('/admin/user', [UsersController::class, 'userPatch'])->name('admin.user')->middleware('auth');
+Route::delete('/admin/user', [UsersController::class, 'userDelete'])->name('admin.user')->middleware('auth');
 
 // admin role and permission
-Route::get('/admin/rp',[RPController::class,'rpPage'])->name('admin.rp');
+Route::get('/admin/rp',[RPController::class,'rpPage'])->name('admin.rp')->middleware('auth');
+Route::get('/admin/rp_by_id', [RPController::class, 'rpById'])->name('admin.rp_by_id')->middleware('auth');
+Route::post('/admin/rp', [RPController::class, 'rpCreate'])->name('admin.rp')->middleware('auth');
+Route::patch('/admin/rp', [RPController::class, 'rpPatch'])->name('admin.rp')->middleware('auth');
+Route::delete('/admin/rp', [RPController::class, 'rpDelete'])->name('admin.rp')->middleware('auth');
