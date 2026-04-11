@@ -159,7 +159,12 @@ users_table.on('click.delete_user', '.action_delete', async function () {
                 users_table.row("#" + this.value).remove().draw();
                 
             } else {
-                const res_code = await res.text();
+                const res_json = await res.json();
+
+                swal2_mixin.fire({
+                    icon: "error",
+                    title: res_json.errors
+                })
             }
         }
     });

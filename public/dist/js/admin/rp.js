@@ -88,6 +88,12 @@ roles_table.on('click.button_delete', '.action_delete', async function () {
                     title: "Role berhasil di hapus!"
                 })
                 roles_table.row("#" + this.value).remove().draw();
+            } else {
+                const res_json = await res.json();
+                swal2_mixin.fire({
+                    icon: "error",
+                    title: res_json.errors
+                })
             }
         }
     })
@@ -150,6 +156,12 @@ async function tambah_role() {
         ]).draw();
 
         modal_role.modal("hide");
+    } else {
+        const res_json = await res.json();
+        swal2_mixin.fire({
+            icon: "error",
+            title: res_json.errors
+        })
     }
 }
 
@@ -193,5 +205,11 @@ async function edit_role(id) {
         ]).draw();
 
         modal_role.modal("hide");
+    } else {
+        const res_json = await res.json();
+        swal2_mixin.fire({
+            icon: "error",
+            title: res_json.errors
+        })
     }
 }

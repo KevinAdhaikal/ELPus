@@ -70,6 +70,7 @@ class UsersController extends Controller
         $data = [
             'username' => $req->username,
             'full_name' => $req->full_name,
+            'email' => $req->email,
             'role_id' => $req->role_id,
         ];
 
@@ -86,6 +87,16 @@ class UsersController extends Controller
     }
     
     public function userDelete(Request $req) {
+        $validator = Validator::make($req->all(), [
+            'id ' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()->first()
+            ], 403);
+        }
+
         $user = User::findOrFail($req->id);
         $user->delete();
 
