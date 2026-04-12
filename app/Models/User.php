@@ -28,4 +28,12 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function role() {
+        return $this->belongsTo(Roles::class);
+    }
+
+    public function hasPermission($requiredBitmask) {
+        return ($this->role->permission_level & $requiredBitmask) !== 0;
+    }
 }

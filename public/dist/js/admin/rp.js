@@ -36,7 +36,7 @@ roles_table.on('click.button_edit', '.action_edit', async function () {
         modal_role_button.innerText = "Edit Role";
         modal_role_button.disabled = false;
         modal_role_button.onclick = () => {
-            edit_role(res_json.id);
+            edit_role(this.value);
         }
         
         const res_json = await res.json();

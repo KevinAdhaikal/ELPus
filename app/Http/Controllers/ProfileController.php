@@ -11,6 +11,7 @@ class ProfileController extends Controller
     public function profilePage() {
         return view('profile');
     }
+    
     public function profile(Request $req) {
         $user = Auth::user();
 

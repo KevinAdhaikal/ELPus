@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\BukuController;
+use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RPController;
 use App\Http\Controllers\UsersController;
@@ -8,7 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    if (auth()->check()) return redirect()->route('dashboard');
+    if (auth()->check()) return redirect()->route('daftar_buku');
     return redirect()->route('login');
 });
 
@@ -30,8 +31,11 @@ Route::post('/req_reset_code', [AuthController::class, 'requestResetCode'])->nam
 // logout routes
 Route::get('/logout',[AuthController::class,'logout'])->name('logout')->middleware('auth');
 
-// dashboard routes
-Route::get('/dashboard',[DashboardController::class,'dashboardPage'])->name('dashboard')->middleware('auth');
+// daftar buku routes
+Route::get('/daftar_buku',[BukuController::class,'daftarBukuPage'])->name('daftar_buku')->middleware('auth');
+
+// list peminjaman routes
+Route::get('/list_peminjaman', [PeminjamanController::class, 'listPeminjamanPage'])->name('list_peminjaman')->middleware('auth');
 
 // profile routes
 Route::get('/profile',[ProfileController::class,'profilePage'])->name('profile')->middleware('auth');
@@ -39,6 +43,15 @@ Route::post('/profile', [ProfileController::class, 'profile'])->name('profile')-
 
 // change password routes
 Route::post('/change_password', [ProfileController::class, 'change_password'])->name('change_password')->middleware('auth');
+
+// buku routes
+Route::get('/buku_by_id', [BukuController::class, 'bukuById'])->name('buku_by_id')->middleware('auth');
+
+// manage buku routes
+Route::get('/admin/manage_buku', [BukuController::class, 'manageBukuPage'])->name('admin.manage_buku')->middleware('auth');
+Route::post('/admin/manage_buku', [BukuController::class, 'postBuku'])->name('admin.manage_buku')->middleware('auth');
+Route::patch('/admin/manage_buku', [BukuController::class, 'patchBuku'])->name('admin.manage_buku')->middleware('auth');
+Route::delete('/admin/manage_buku', [BukuController::class, 'deleteBuku'])->name('admin.manage_buku')->middleware('auth');
 
 // admin users
 Route::get('/admin/users',[UsersController::class,'usersPage'])->name('admin.users')->middleware('auth');

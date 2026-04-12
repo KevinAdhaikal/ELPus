@@ -141,8 +141,8 @@ use App\Models\Roles;
                       <label class="mb-2">Akses Member</label>
 
                       <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="buku_lihat" value="{{ Roles::BUKU_LIHAT }}">
-                        <label for="buku_lihat">Lihat Buku</label>
+                        <input class="perm_cb" type="checkbox" id="daftar_buku" value="{{ Roles::DAFTAR_BUKU }}">
+                        <label for="daftar_buku">Daftar Buku</label>
                       </div>
 
                       <div class="icheck-primary">
@@ -166,18 +166,23 @@ use App\Models\Roles;
                       <label class="mb-2">Manajemen Buku</label>
 
                       <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="buku_tambah" value="{{ Roles::BUKU_TAMBAH }}">
-                        <label for="buku_tambah">Tambah Buku</label>
+                        <input class="perm_cb" type="checkbox" id="manajemen_buku_lihat" value="{{ Roles::MANAJEMEN_BUKU_LIHAT }}">
+                        <label for="manajemen_buku_lihat">Lihat Buku</label>
                       </div>
 
                       <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="buku_edit" value="{{ Roles::BUKU_EDIT }}">
-                        <label for="buku_edit">Edit Buku</label>
+                        <input class="perm_cb" type="checkbox" id="mnajemen_buku_tambah" value="{{ Roles::MANAJEMEN_BUKU_TAMBAH }}">
+                        <label for="mnajemen_buku_tambah">Tambah Buku</label>
                       </div>
 
                       <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="buku_hapus" value="{{ Roles::BUKU_HAPUS }}">
-                        <label for="buku_hapus">Hapus Buku</label>
+                        <input class="perm_cb" type="checkbox" id="manajemen_buku_edit" value="{{ Roles::MANAJEMEN_BUKU_EDIT }}">
+                        <label for="manajemen_buku_edit">Edit Buku</label>
+                      </div>
+
+                      <div class="icheck-primary">
+                        <input class="perm_cb" type="checkbox" id="manajemen_buku_hapus" value="{{ Roles::MANAJEMEN_BUKU_HAPUS }}">
+                        <label for="manajemen_buku_hapus">Hapus Buku</label>
                       </div>
                     </div>
 
@@ -198,31 +203,6 @@ use App\Models\Roles;
                       <div class="icheck-primary">
                         <input class="perm_cb" type="checkbox" id="pinjam_lihat_semua" value="{{ Roles::PINJAM_LIHAT_SEMUA }}">
                         <label for="pinjam_lihat_semua">Lihat Semua Peminjaman</label>
-                      </div>
-                    </div>
-
-                    <!-- MANAJEMEN USER -->
-                    <div class="col-md-4 mt-3">
-                      <label class="mb-2">Manajemen User</label>
-
-                      <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="user_lihat" value="{{ Roles::USER_LIHAT }}">
-                        <label for="user_lihat">Lihat User</label>
-                      </div>
-
-                      <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="user_tambah" value="{{ Roles::USER_TAMBAH }}">
-                        <label for="user_tambah">Tambah User</label>
-                      </div>
-
-                      <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="user_edit" value="{{ Roles::USER_EDIT }}">
-                        <label for="user_edit">Edit User</label>
-                      </div>
-
-                      <div class="icheck-primary">
-                        <input class="perm_cb" type="checkbox" id="user_hapus" value="{{ Roles::USER_HAPUS }}">
-                        <label for="user_hapus">Hapus User</label>
                       </div>
                     </div>
 

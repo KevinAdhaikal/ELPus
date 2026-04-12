@@ -1,3 +1,7 @@
+<?php
+use App\Models\Roles;
+?>
+
 <!-- resources/views/layouts/sidebar.blade.php -->
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
   <!-- Brand Logo -->
@@ -10,33 +14,48 @@
   <div class="sidebar">
     <!-- Sidebar Menu -->
     <nav class="mt-2">
-      <li class="section_check" data-value="0">
-        <ul class="nav nav-pills nav-sidebar flex-column">
-          <li class="nav-header">DASHBOARD</li>
-          <li class="nav-item">
-            <a href="{{ isRoute('dashboard') }}" class="nav-link {{ isActive('dashboard') }}">
-              <i class="nav-icon fas fa-th"></i>
-              <p>
-                Dashboard
-              </p>
-            </a>
-          </li>
-        </ul>
-      </li>
-      <li class="section_check" data-value="0">
+      <ul class="nav nav-pills nav-sidebar flex-column">
+        @if (auth()->user()->hasPermission(Roles::DAFTAR_BUKU | Roles::ADMINISTRATOR))
+        <li class="nav-item">
+          <a href="{{ isRoute('daftar_buku') }}" class="nav-link {{ isActive('daftar_buku') }}">
+            <i class="nav-icon fas fa-book"></i>
+            <p>
+              Daftar Buku
+            </p>
+          </a>
+        </li>
+        @endif
+        @if (auth()->user()->hasPermission(ROLES::PINJAM_LIHAT_SENDIRI | ROLES::ADMINISTRATOR))
+        <li class="nav-item">
+          <a href="{{ isRoute('list_peminjaman') }}" class="nav-link {{ isActive('list_peminjaman') }}">
+            <i class="nav-icon fas fa-clipboard-list"></i>
+            <p>
+              List Peminjaman
+            </p>
+          </a>
+        </li>
+        @endif
+      </ul>
+      <li class="section_check">
         <ul class="nav nav-pills nav-sidebar flex-column">
           <li class="nav-item">
             <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
           </li>
           <li class="nav-header">ADMIN</li>
           <li class="nav-item">
-            <a href="{{ isRoute("admin.users") }}" class="nav-link {{ isActive('admin.users') }}" data-url="/users">
+            <a href="{{ isRoute("admin.manage_buku") }}" class="nav-link {{ isActive('admin.manage_buku') }}">
+              <i class="nav-icon fas fa-book"></i>
+              <p>Manage Buku</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ isRoute("admin.users") }}" class="nav-link {{ isActive('admin.users') }}">
               <i class="nav-icon fas fa-users"></i>
               <p>Users</p>
             </a>
           </li>
           <li class="nav-item">
-            <a href="{{ isRoute("admin.rp") }}" class="nav-link {{ isActive('admin.rp') }}" data-url="/rp">
+            <a href="{{ isRoute("admin.rp") }}" class="nav-link {{ isActive('admin.rp') }}">
               <i class="nav-icon fas fa-user-tag"></i>
               <p>Roles & Permissions</p>
             </a>

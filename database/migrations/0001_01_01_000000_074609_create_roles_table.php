@@ -28,7 +28,7 @@ return new class extends Migration
             ],
             [
                 'name' => 'Member',
-                'permission_level' => Roles::BUKU_LIHAT | Roles::PINJAM_BUAT | Roles::PINJAM_LIHAT_SENDIRI | Roles::PINJAM_BATAL,
+                'permission_level' => Roles::DAFTAR_BUKU | Roles::PINJAM_BUAT | Roles::PINJAM_LIHAT_SENDIRI | Roles::PINJAM_BATAL,
                 'created_at' => now(),
                 'updated_at' => now()
             ]
