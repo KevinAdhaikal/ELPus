@@ -32,7 +32,7 @@ class RPController extends Controller
 
         $role = Roles::create([
             'name' => $req->name,
-            'permission_level' => $req->perm
+            'permission_level' => $req->permission_level
         ]);
 
         return response()->json([
@@ -57,7 +57,7 @@ class RPController extends Controller
 
         $role->update([
             'name' => $req->name,
-            'permission_level' => $req->perm
+            'permission_level' => $req->permission_level
         ]);
 
         return response()->json([

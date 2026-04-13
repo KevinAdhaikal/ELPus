@@ -270,10 +270,27 @@ async function tambah_user() {
     })
 
     if (res.status === 200) {
+        const res_json = await res.json();
+
+        console.log(res_json);
+        
         swal2_mixin.fire({
             icon: "success",
             title: "User account has been created!"
         });
+
+        users_table.row.add([
+            res_json.data.username,
+            res_json.data.full_name,
+            new Date(res_json.data.created_at).toLocaleString('en-GB', {day: '2-digit',month: 'short',year: 'numeric',hour: '2-digit',minute: '2-digit',second: '2-digit',hour12: false}),
+            new Date(res_json.data.updated_at).toLocaleString('en-GB', {day: '2-digit',month: 'short',year: 'numeric',hour: '2-digit',minute: '2-digit',second: '2-digit',hour12: false}),
+            `<center>
+              <button type="button" class="text-right btn btn-primary action_edit" value="${res_json.data.id}"><i class="fa fa-eye"></i> View/Edit</button>
+              <button type="button" class="text-right btn btn-danger action_delete" value="${res_json.data.id}"><i class="fa fa-trash"></i> Delete</button>
+            </center>`,
+            res_json.data.id
+        ]).draw();
+
         modal_user.modal("hide");
     } else {
         const res_json = await res.json();

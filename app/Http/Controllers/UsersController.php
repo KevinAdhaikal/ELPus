@@ -88,7 +88,7 @@ class UsersController extends Controller
     
     public function userDelete(Request $req) {
         $validator = Validator::make($req->all(), [
-            'id ' => 'required|integer'
+            'id' => 'required|integer'
         ]);
 
         if ($validator->fails()) {

@@ -63,6 +63,7 @@ roles_table.on('click.button_edit', '.action_edit', async function () {
 });
 
 roles_table.on('click.button_delete', '.action_delete', async function () {
+    console.log(this.value);
     Swal.fire({
         title: "Delete Role",
         text: "Apakah anda yakin untuk hapus role ini?",
@@ -131,7 +132,7 @@ async function tambah_role() {
         },
         body: JSON.stringify({
             name: role_name.value,
-            perm: res_perm
+            permission_level: res_perm
         })
     })
 
@@ -150,7 +151,7 @@ async function tambah_role() {
             `
             <center>
               <button type="button" class="text-right btn btn-primary action_edit" value="${res_json.data.id}"><i class="fa fa-eye"></i> View/Edit</button>
-              <button type="button" class="text-right btn btn-danger action_delete" value=${res_json.data.id}"><i class="fa fa-trash"></i> Delete</button>
+              <button type="button" class="text-right btn btn-danger action_delete" value="${res_json.data.id}"><i class="fa fa-trash"></i> Delete</button>
             </center>`,
             res_json.data.id
         ]).draw();
@@ -180,7 +181,7 @@ async function edit_role(id) {
         body: JSON.stringify({
             id,
             name: role_name.value,
-            perm: res_perm
+            permission_level: res_perm
         })
     })
 
@@ -199,7 +200,7 @@ async function edit_role(id) {
             `
             <center>
               <button type="button" class="text-right btn btn-primary action_edit" value="${res_json.data.id}"><i class="fa fa-eye"></i> View/Edit</button>
-              <button type="button" class="text-right btn btn-danger action_delete" value=${res_json.data.id}"><i class="fa fa-trash"></i> Delete</button>
+              <button type="button" class="text-right btn btn-danger action_delete" value="${res_json.data.id}"><i class="fa fa-trash"></i> Delete</button>
             </center>`,
             res_json.data.id
         ]).draw();
