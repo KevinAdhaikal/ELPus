@@ -60,14 +60,30 @@
                   <th>Cover Buku</th>
                   <th>Nama Buku</th>
                   <th>Stok</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </thead>
                 <tbody>
                   @foreach ($books as $book)
                   <tr id="{{ $book->id }}">
-                    <td><img width="200" height="300" style="object-fit: cover;" src="/cover_buku/{{ $book->cover_buku }}"></td>
+                    <td><img width="100" height="150" style="object-fit: cover;" src="/cover_buku/{{ $book->cover_buku }}"></td>
                     <td>{{ $book->nama_buku }}</td>
                     <td>{{ $book->stok }}</td>
+                    <td>
+                      @if(in_array($book->id, $borrowedBookIds))
+                        <span class="badge badge-pill badge-primary px-2 py-2" style="font-size: 13px;">
+                          Dipinjam
+                        </span>
+                      @elseif ($book->stok < 0)
+                        <span class="badge badge-pill badge-danger px-2 py-2" style="font-size: 13px;">
+                          Tidak Tersedia
+                        </span>
+                      @else
+                      <span class="badge badge-pill badge-success px-2 py-2" style="font-size: 13px;">
+                          Tersedia
+                        </span>
+                      @endif
+                    </td>
                     <td>
                       <center>
                         <button type="button" class="text-right btn btn-primary action_view" value="{{ $book->id }}"><i class="fa fa-eye"></i> Lihat</button>

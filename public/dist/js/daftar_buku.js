@@ -21,10 +21,11 @@ const daftar_buku_table = $("#daftar_buku_table").DataTable({
         { data: 0 },
         { data: 1 },
         { data: 2 },
-        { data: 3 }
+        { data: 3 },
+        { data: 4 }
     ],
     columnDefs: [
-        { className: "text-center align-middle", targets: 3 }
+        { className: "text-center align-middle", targets: 4 }
     ]
 });
 
@@ -53,7 +54,6 @@ daftar_buku_table.on('click.button_view', '.action_view', async function () {
             }
         }
         
-
         buku_modal.modal("show");
         
         document.activeElement.blur();

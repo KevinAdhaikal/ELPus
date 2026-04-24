@@ -13,7 +13,7 @@ class PeminjamanController extends Controller
         $pinjamans = Peminjaman::with('book')
         ->where('user_id', auth()->id())
         ->get();
-        
+
         return view('list_peminjaman', compact('pinjamans'));
     }
 

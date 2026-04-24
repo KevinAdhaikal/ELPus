@@ -58,6 +58,7 @@
               <table id="list_peminjaman_table" style="table-layout: fixed;" class="table table-bordered table-striped table-hover display">
                 <thead>
                   <th>Cover Buku</th>
+                  <th>Status</th>
                   <th>Tanggal Pinjam</th>
                   <th>Tanggal Tempo</th>
                   <th>Tanggal Kembali</th>
@@ -66,7 +67,23 @@
                 <tbody>
                   @foreach ($pinjamans as $pinjaman)
                   <tr id="{{ $pinjaman->id }}">
-                      <td><img width="200" height="300" style="object-fit: cover;" src="/cover_buku/{{ $pinjaman->book->cover_buku }}"></td>
+                      <td><img width="100" height="150" style="object-fit: cover;" src="/cover_buku/{{ $pinjaman->book->cover_buku }}"></td>
+                      <td>
+                          @php
+                              $status = strtolower($pinjaman->status);
+
+                              $badgeClass = match($status) {
+                                  'dipinjam' => 'badge-primary',
+                                  'telat' => 'badge-danger',
+                                  'dikembalikan' => 'badge-success',
+                                  default => 'badge-secondary'
+                              };
+                          @endphp
+
+                          <span class="badge badge-pill {{ $badgeClass }} px-2 py-2" style="font-size: 13px;">
+                              {{ ucfirst($status) }}
+                          </span>
+                      </td>
                       <td>{{ $pinjaman->tanggal_pinjam->format('d M Y H:i:s') ?? "Tidak Ada" }}</td>
                       <td>{{ $pinjaman->tanggal_jatuh_tempo->format('d M Y H:i:s') ?? "Tidak Ada"}}</td>
                       <td>{{ $pinjaman->tanggal_kembali ? $pinjaman->tanggal_kembali->format('d M Y H:i:s') : "Belum Dikembalikan" }}</td>
