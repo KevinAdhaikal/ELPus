@@ -34,8 +34,12 @@ Route::get('/logout',[AuthController::class,'logout'])->name('logout')->middlewa
 // daftar buku routes
 Route::get('/daftar_buku',[BukuController::class,'daftarBukuPage'])->name('daftar_buku')->middleware('auth');
 
-// list peminjaman routes
-Route::get('/list_peminjaman', [PeminjamanController::class, 'listPeminjamanPage'])->name('list_peminjaman')->middleware('auth');
+// pinjam buku routes
+Route::get('/list_peminjaman', [PeminjamanController::class, 'listPeminjamanPage'])->name('list_peminjaman')->middleware(middleware: 'auth');
+Route::get('/admin/peminjaman', [PeminjamanController::class, 'adminPeminjamanPage'])->name('admin.peminjaman')->middleware('auth');
+Route::get('/pinjaman_by_id', [PeminjamanController::class, 'pinjamanById'])->name('pinjaman_by_id')->middleware('auth');
+Route::post('/pinjam_buku', [PeminjamanController::class, 'addPinjamBuku'])->name('pinjam_buku')->middleware('auth');
+Route::post('/admin/kembalikan_pinjaman_buku', [PeminjamanController::class, 'kembalikanPinjamanBuku'])->name('admin.kembalikan_pinjaman_buku')->middleware('auth');
 
 // profile routes
 Route::get('/profile',[ProfileController::class,'profilePage'])->name('profile')->middleware('auth');

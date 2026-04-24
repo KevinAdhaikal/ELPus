@@ -58,25 +58,19 @@
               <table id="list_peminjaman_table" style="table-layout: fixed;" class="table table-bordered table-striped table-hover display">
                 <thead>
                   <th>Cover Buku</th>
-                  <th>Nama Buku</th>
-                  <th>Mulai Pinjam</th>
-                  <th>Akhir Pinjam</th>
+                  <th>Tanggal Pinjam</th>
+                  <th>Tanggal Tempo</th>
+                  <th>Tanggal Kembali</th>
                   <th>Denda</th>
-                  <th>Action</th>
                 </thead>
                 <tbody>
                   @foreach ($pinjamans as $pinjaman)
                   <tr id="{{ $pinjaman->id }}">
-                      <td>{{ $pinjaman->cover_buku }}</td>
-                      <td>{{ $pinjaman->nama_buku }}</td>
-                      <td>{{ $pinjaman->mulai_pinjam->format('d M Y H:i:s') }}</td>
-                      <td>{{ $pinjaman->akhir_pinjam->format('d M Y H:i:s') }}</td>
-                      <td>{{ $pinjaman->denda }}</td>
-                      <td>
-                        <center>
-                          <button type="button" class="text-right btn btn-primary action_kembali" value="{{ $user->id }}"><i class="fa fa-undo"></i> Kembalikan Buku</button>
-                        </center>
-                      </td>
+                      <td><img width="200" height="300" style="object-fit: cover;" src="/cover_buku/{{ $pinjaman->book->cover_buku }}"></td>
+                      <td>{{ $pinjaman->tanggal_pinjam->format('d M Y H:i:s') ?? "Tidak Ada" }}</td>
+                      <td>{{ $pinjaman->tanggal_jatuh_tempo->format('d M Y H:i:s') ?? "Tidak Ada"}}</td>
+                      <td>{{ $pinjaman->tanggal_kembali ? $pinjaman->tanggal_kembali->format('d M Y H:i:s') : "Belum Dikembalikan" }}</td>
+                      <td>Rp{{ number_format($pinjaman->calculateDenda(), 0, '.', ',') }}</td>
                   </tr>
                   @endforeach
                 </tbody>
@@ -112,7 +106,7 @@
 <!-- Sweetalert2 -->
 <script src="{{ asset("plugins/sweetalert2/sweetalert2.all.min.js") }}"></script>
 <!-- List Peminjaman -->
-<script src="{{ asset('dist/js/admin/list_peminjaman.js') }}"></script>
+<script src="{{ asset('dist/js/list_peminjaman.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 </body>

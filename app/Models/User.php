@@ -33,6 +33,11 @@ class User extends Authenticatable
         return $this->belongsTo(Roles::class);
     }
 
+    public function peminjamans()
+    {
+        return $this->hasMany(Peminjaman::class, 'user_id');
+    }
+
     public function hasPermission($requiredBitmask) {
         return ($this->role->permission_level & $requiredBitmask) !== 0;
     }

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   
-  <title>{{ config('app.name') }} | Daftar Buku</title>
+  <title>{{ config('app.name') }} | Peminjaman</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -22,6 +22,31 @@
   <link rel="stylesheet" href="{{ asset('plugins/sweetalert2/sweetalert2.css') }}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
+  <style>
+    .hr-text {
+        display: flex;
+        align-items: center;
+        text-align: center;
+        font-weight: bold;
+        color: currentColor;
+    }
+
+    .hr-text::before,
+    .hr-text::after {
+        content: "";
+        flex: 1;
+        border-bottom: 1px solid currentColor;
+    }
+
+    .hr-text::before {
+        margin-right: 10px;
+    }
+
+    .hr-text::after {
+        margin-left: 10px;
+    }
+  </style>
+
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -42,7 +67,7 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1 class="m-0">Daftar Buku</h1>
+            <h1 class="m-0">Peminjaman</h1>
           </div><!-- /.col -->
         </div><!-- /.row -->
       </div><!-- /.container-fluid -->
@@ -55,34 +80,26 @@
         <div class="row">
           <div class="card card-primary">
 						<div class="card-body">
-              <table id="daftar_buku_table" style="table-layout: fixed;" class="table table-bordered table-striped table-hover display">
+              <table id="peminjaman_table" style="table-layout: fixed;" class="table table-bordered table-striped table-hover display">
                 <thead>
-                  <th>Cover Buku</th>
                   <th>Nama Buku</th>
-                  <th>Stok</th>
+                  <th>Nama Peminjam</th>
+                  <th>Tanggal Pinjam</th>
+                  <th>Tanggal Kembali</th>
                   <th>Action</th>
                 </thead>
                 <tbody>
-                  @foreach ($books as $book)
-                  <tr id="{{ $book->id }}">
-                    <td><img width="200" height="300" style="object-fit: cover;" src="/cover_buku/{{ $book->cover_buku }}"></td>
-                    <td>{{ $book->nama_buku }}</td>
-                    <td>{{ $book->stok }}</td>
-                    <td>
-                      <center>
-                        <button type="button" class="text-right btn btn-primary action_view" value="{{ $book->id }}"><i class="fa fa-eye"></i> Lihat</button>
-                          <button
-                            type="button"
-                            class="text-right btn btn-success action_borrow"
-                            value="{{ $book->id }}"
-                            @if ($book->stok < 0 || in_array($book->id, $borrowedBookIds))
-                              disabled
-                            @endif
-                          >
-                            <i class="fas fa-hand-holding"></i> Pinjam Buku
-                          </button>
+                  @foreach ($pinjamans as $pinjaman)
+                  <tr id="{{ $pinjaman->id }}">
+                      <td>{{ $pinjaman->book->nama_buku }}</td>
+                      <td>{{ $pinjaman->user->full_name }}</td>
+                      <td>{{ $pinjaman->tanggal_pinjam->format('d M Y H:i:s') }}</td>
+                      <td>{{ $pinjaman->tanggal_kembali ? $pinjaman->tanggal_kembali->format('d M Y H:i:s') : "Belum Dikembalikan" }}</td>
+                      <td>
+                        <center>
+                          <button type="button" class="text-right btn btn-primary action_view" value="{{ $pinjaman->id }}"><i class="fa fa-eye"></i> Lihat</button>
                         </center>
-                    </td>
+                      </td>
                   </tr>
                   @endforeach
                 </tbody>
@@ -90,7 +107,7 @@
 						</div>
 					</div>
         </div>
-        <div class="modal fade" id="buku_modal" aria-hidden="true">
+        <div class="modal fade" id="peminjaman_modal" aria-hidden="true">
           <div class="modal-dialog modal-xl modal-dialog-centered">
             <div class="modal-content">
 
@@ -169,33 +186,75 @@
                           </div>
                         </div>
                       </div>
-
-                      <div class="col-md-6">
-                        <div class="form-group">
-                          <label>Stok</label>
-                          <div class="input-group">
-                            <div class="input-group-prepend">
-                              <span class="input-group-text">
-                                <i class="fas fa-box"></i>
-                              </span>
-                            </div>
-                            <input type="number" class="form-control" id="stok" placeholder="Jumlah stok" readonly>
-                          </div>
-                        </div>
-                      </div>
                     </div>
-
+                  </div>
+                </div>
+                <div class="col">
+                  <label class="hr-text">Peminjaman</label>
+                  <div class="form-group">
+                    <label>Nama Peminjam</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-user"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" id="nama_peminjam" placeholder="Nama Peminjamn" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Tanggal Pinjam</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-calendar"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" id="tanggal_pinjam" placeholder="Tanggal Pinjam" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Tanggal Tempo</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-calendar"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" id="tanggal_tempo" placeholder="Tanggal Tempo" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Tanggal Kembali</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          <i class="fas fa-calendar"></i>
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" id="tanggal_kembali" placeholder="Tanggal Kembali" readonly>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label>Denda</label>
+                    <div class="input-group">
+                      <div class="input-group-prepend">
+                        <span class="input-group-text">
+                          Rp
+                        </span>
+                      </div>
+                      <input type="text" class="form-control" id="denda" placeholder="Denda" readonly>
+                    </div>
                   </div>
                 </div>
               </div>
 
               <div class="modal-footer justify-content-between">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close (Esc)</button>
-                <button type="button" class="btn btn-success" id="buku_modal_button">
-                  Pinjam Buku
+                <button type="button" class="btn btn-success" id="kembalikan_buku_modal_button">
+                  Kembalikan Buku
                 </button>
               </div>
-
             </div>
           </div>
         </div>
@@ -226,8 +285,8 @@
 <script src="{{ asset('plugins/select2/js/select2.full.min.js') }}"></script>
 <!-- Sweetalert2 -->
 <script src="{{ asset("plugins/sweetalert2/sweetalert2.all.min.js") }}"></script>
-<!-- Daftar Buku -->
-<script src="{{ asset('dist/js/daftar_buku.js') }}"></script>
+<!-- Peminjaman -->
+<script src="{{ asset('dist/js/admin/peminjaman.js') }}"></script>
 <!-- AdminLTE App -->
 <script src="{{ asset('dist/js/adminlte.min.js') }}"></script>
 </body>

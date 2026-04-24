@@ -36,18 +36,30 @@ use App\Models\Roles;
         </li>
         @endif
       </ul>
+      @if (auth()->user()->hasPermission(ROLES::ADMINISTRATOR | ROLES::MANAJEMEN_BUKU_LIHAT | ROLES::PINJAM_LIHAT_SEMUA))
       <li class="section_check">
         <ul class="nav nav-pills nav-sidebar flex-column">
           <li class="nav-item">
             <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
           </li>
           <li class="nav-header">ADMIN</li>
+          @if (auth()->user()->hasPermission(ROLES::ADMINISTRATOR | ROLES::MANAJEMEN_BUKU_LIHAT))
           <li class="nav-item">
             <a href="{{ isRoute("admin.manage_buku") }}" class="nav-link {{ isActive('admin.manage_buku') }}">
               <i class="nav-icon fas fa-book"></i>
               <p>Manage Buku</p>
             </a>
           </li>
+          @endif
+          @if (auth()->user()->hasPermission(ROLES::ADMINISTRATOR | ROLES::PINJAM_LIHAT_SEMUA))
+          <li class="nav-item">
+            <a href="{{ isRoute("admin.peminjaman") }}" class="nav-link {{ isActive('admin.peminjaman') }}">
+              <i class="nav-icon fas fa-clipboard-list"></i>
+              <p>Peminjaman</p>
+            </a>
+          </li>
+          @endif
+          @if (auth()->user()->hasPermission(ROLES::ADMINISTRATOR))
           <li class="nav-item">
             <a href="{{ isRoute("admin.users") }}" class="nav-link {{ isActive('admin.users') }}">
               <i class="nav-icon fas fa-users"></i>
@@ -60,8 +72,10 @@ use App\Models\Roles;
               <p>Roles & Permissions</p>
             </a>
           </li>
+          @endif
         </ul>
       </li>
+      @endif
     </nav>
   </div>
 </aside>

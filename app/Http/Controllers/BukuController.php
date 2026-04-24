@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\Buku;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class BukuController extends Controller
 {
     public function daftarBukuPage() {
         $books = Buku::all();
-        return view('daftar_buku', compact(var_name: 'books'));
+        
+        $borrowedBookIds = Peminjaman::where('user_id', Auth::id())
+        ->pluck('book_id')
+        ->toArray();
+
+        return view('daftar_buku', compact('books', 'borrowedBookIds'));
     }
 
     public function manageBukuPage() {
@@ -18,9 +25,29 @@ class BukuController extends Controller
         return view('admin.manage_buku', compact('books'));
     }
 
-    public function bukuById(Request $req) {
+    public function bukuById(Request $req)
+    {
+        $validator = Validator::make($req->all(), [
+            'id' => 'required|integer'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()->first()
+            ], 403);
+        }
+
         $book = Buku::findOrFail($req->id);
-        return response()->json($book);
+
+        $isBorrowed = Peminjaman::where('user_id', Auth::id())
+            ->where('book_id', $book->id)
+            ->where('status', 'dipinjam') // kalau ada status
+            ->exists();
+
+        return response()->json([
+            'book' => $book,
+            'is_borrowed' => $isBorrowed
+        ]);
     }
 
     public function postBuku(Request $req) {

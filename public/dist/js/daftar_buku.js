@@ -1,3 +1,10 @@
+const swal2_mixin = Swal.mixin({
+    toast: true,
+    position: 'top-end',
+    showConfirmButton: false,
+    timer: 3000
+});
+
 const buku_modal_button = document.getElementById("buku_modal_button");
 
 const nama_buku = document.getElementById("nama_buku");
@@ -28,28 +35,78 @@ daftar_buku_table.on('click.button_view', '.action_view', async function () {
     });
 
     if (res.status === 200) {
-        buku_modal_button.onclick = () => {
-            pinjam_buku(this.value);
+        const res_json = await res.json();
+        cover_preview.src = `/cover_buku/${res_json.book.cover_buku}`;
+
+        nama_buku.value = res_json.book.nama_buku;
+        penulis.value = res_json.book.penulis;
+        penerbit.value = res_json.book.penerbit;
+        tahun_terbit.value = res_json.book.tahun_terbit;
+        stok.value = res_json.book.stok;
+
+        if (res_json.is_borrowed) {
+            buku_modal_button.onclick = () => {};
+            buku_modal_button.disabled = true;
+        } else {
+            buku_modal_button.onclick = () => {
+                pinjam_buku(this.nextElementSibling, res_json.book.id, 1)
+            }
         }
         
-        const res_json = await res.json();
-        cover_preview.src = `/cover_buku/${res_json.cover_buku}`;
-
-        nama_buku.value = res_json.nama_buku;
-        penulis.value = res_json.penulis;
-        penerbit.value = res_json.penerbit;
-        tahun_terbit.value = res_json.tahun_terbit;
-        stok.value = res_json.stok;
 
         buku_modal.modal("show");
+        
         document.activeElement.blur();
     }
 });
 
-daftar_buku_table.on('click.button_borrow', '.action_borrow', async function () {
-    pinjam_buku(this.value)
-})
+function pinjam_buku(ev, id, close_modal = 0) {
+    Swal.fire({
+        title: "Pinjam Buku",
+        text: "Apakah anda ingin meminjam buku ini?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes",
+        cancelButtonText: "No"
+    }).then(async res => {
+        if (res.isConfirmed) {
+            const res = await fetch("/pinjam_buku", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    book_id: id
+                })
+            })
 
-async function pinjam_buku(id) {
-    console.log("result:", id);
+            if (res.status === 200) {
+                const res_json = await res.json();
+                
+                swal2_mixin.fire({
+                    icon: "success",
+                    title: "Buku berhasil dipinjamkan!"
+                });
+
+                if (ev) ev.disabled = true;
+                if (close_modal) buku_modal.modal("hide");
+                daftar_buku_table.cell("#" + id, 2).data(new Intl.NumberFormat("id-ID").format(res_json.stok)).draw();
+            }
+            else {
+                const res_json = await res.json();
+                
+                swal2_mixin.fire({
+                    icon: "error",
+                    title: res_json.errorss
+                });
+            }
+        }
+    });
 }
+
+daftar_buku_table.on('click.button_borrow', '.action_borrow', async function () {
+    pinjam_buku(this, this.value);
+})

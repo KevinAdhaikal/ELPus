@@ -17,6 +17,11 @@ class Buku extends Model
         'stok'
     ];
     
+    public function peminjamans()
+    {
+        return $this->hasMany(Peminjaman::class, 'book_id');
+    }
+
     public function getStatusAttribute($value)
     {
         return $this->stok > 0 ? 'available' : 'unavailable';
