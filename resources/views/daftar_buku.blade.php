@@ -87,17 +87,18 @@
                     <td>
                       <center>
                         <button type="button" class="text-right btn btn-primary action_view" value="{{ $book->id }}"><i class="fa fa-eye"></i> Lihat</button>
-                          <button
+                        <button
                             type="button"
                             class="text-right btn btn-success action_borrow"
                             value="{{ $book->id }}"
-                            @if ($book->stok < 0 || in_array($book->id, $borrowedBookIds))
-                              disabled
+                            @if ($book->stok <= 0 || 
+                                in_array($book->id, $borrowedBookIds))
+                                disabled
                             @endif
-                          >
+                        >
                             <i class="fas fa-hand-holding"></i> Pinjam Buku
-                          </button>
-                        </center>
+                        </button>
+                      </center>
                     </td>
                   </tr>
                   @endforeach

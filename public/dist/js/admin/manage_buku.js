@@ -47,15 +47,14 @@ manage_buku_table.on('click.button_edit', '.action_edit', async function () {
         const res_json = await res.json();
         manage_buku_modal_title.innerText = "Tambah Buku";
         manage_buku_modal_button.innerText = "Tambah Buku";
-        cover_preview.src = `/cover_buku/${res_json.cover_buku}`;
+        cover_preview.src = `/cover_buku/${res_json.book.cover_buku}`;
         cover_buku.value = "";
-        console.log(cover_buku.files[0]);
 
-        nama_buku.value = res_json.nama_buku;
-        penulis.value = res_json.penulis;
-        penerbit.value = res_json.penerbit;
-        tahun_terbit.value = res_json.tahun_terbit;
-        stok.value = res_json.stok;
+        nama_buku.value = res_json.book.nama_buku;
+        penulis.value = res_json.book.penulis;
+        penerbit.value = res_json.book.penerbit;
+        tahun_terbit.value = res_json.book.tahun_terbit;
+        stok.value = res_json.book.stok;
 
         manage_buku_modal.modal("show");
         document.activeElement.blur();
@@ -147,9 +146,8 @@ async function edit_buku(id) {
 
     if (res.status === 200) {
         const res_json = await res.json();
-
         manage_buku_table.row("#" + id).data([
-            `<img width="200" height="300" style="object-fit: cover;" src="/cover_buku/${res_json.cover_buku}">`,
+            `<img width="100" height="150" style="object-fit: cover;" src="/cover_buku/${res_json.cover_buku}">`,
             res_json.nama_buku,
             res_json.stok,
             `<div class="text-center align-middle">
@@ -190,7 +188,7 @@ async function tambah_buku() {
         const res_json = await res.json();
 
         manage_buku_table.row.add([
-            `<img width="200" height="300" style="object-fit: cover;" src="/cover_buku/${res_json.cover_buku}">`,
+            `<img width="100" height="150" style="object-fit: cover;" src="/cover_buku/${res_json.cover_buku}">`,
             res_json.nama_buku,
             res_json.stok,
             `<div class="text-center align-middle">
@@ -203,9 +201,8 @@ async function tambah_buku() {
         swal2_mixin.fire({
             icon: "success",
             title: "Buku berhasil di tambahkan!" 
-        })
+        });
 
         manage_buku_modal.modal("hide");
     }
-    
 }

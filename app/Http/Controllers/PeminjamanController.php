@@ -83,6 +83,9 @@ class PeminjamanController extends Controller
         $pinjaman = Peminjaman::findOrFail($req->id);
         $buku = Buku::findOrFail($pinjaman->book_id);
         $buku->stok++;
+        $pinjaman->tanggal_kembali = now();
+        $pinjaman->status = "dikembalikan";
+        $pinjaman->save();
         $buku->save();
 
         return response()->json($buku->all(), 200);

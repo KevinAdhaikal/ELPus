@@ -13,17 +13,26 @@ class BukuController extends Controller
 {
     public function daftarBukuPage() {
         if (!auth()->check()) return redirect()->route('login');
-        if (!auth()->user()->hasPermission(Roles::DAFTAR_BUKU | Roles::ADMINISTRATOR)) return redirect()->route('index');
+
+        $user = auth()->user();
+
+        if (
+            !$user->hasPermission(Roles::DAFTAR_BUKU) &&
+            !$user->hasPermission(Roles::ADMINISTRATOR)
+        ) {
+            return redirect()->route('index');
+        }
 
         $books = Buku::all();
         
-        $borrowedBookIds = Peminjaman::where('user_id', Auth::id())
-        ->pluck('book_id')
-        ->toArray();
+        $borrowedBookIds = Peminjaman::where('user_id', $user->id)
+            ->where('status', 'dipinjam') // 🔥 ini penting
+            ->pluck('book_id')
+            ->toArray();
 
         return view('daftar_buku', compact('books', 'borrowedBookIds'));
     }
-
+    
     public function manageBukuPage() {
         if (!auth()->check()) return redirect()->route('login');
         if (!auth()->user()->hasPermission(Roles::MANAJEMEN_BUKU_LIHAT | Roles::ADMINISTRATOR)) return redirect()->route('index');
