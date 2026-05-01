@@ -11,6 +11,9 @@ use Illuminate\Support\Facades\Validator;
 class UsersController extends Controller
 {
     public function usersPage() {
+        if (!auth()->check()) return redirect()->route('login');
+        if (!auth()->user()->hasPermission(Roles::ADMINISTRATOR)) return redirect()->route('index');
+
         $users = User::all();
         $roles = Roles::all();
 
@@ -54,8 +57,8 @@ class UsersController extends Controller
         $user = User::findOrFail($req->id);
 
         $validator = Validator::make($req->all(), [
-            'username' => 'required|string|max:255|unique:users,username,' . $user->id,
-            'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+            'username' => 'required|string|max:255|unique:users,username,' . $user->id . ',id',
+            'email' => 'required|email|max:255|unique:users,email,' . $user->id . ',id',
             'full_name' => 'required|string|max:255',
             'role_id' => 'required|integer|exists:roles,id',
             'password' => 'nullable|string|min:8'
@@ -63,18 +66,13 @@ class UsersController extends Controller
 
         if ($validator->fails()) {
             return response()->json([
-                'errors' => $validator->errors()->first()
-            ], 403);
+                'errors' => $validator->errors()
+            ], 422);
         }
 
-        $data = [
-            'username' => $req->username,
-            'full_name' => $req->full_name,
-            'email' => $req->email,
-            'role_id' => $req->role_id,
-        ];
+        $data = $req->only(['username', 'full_name', 'email', 'role_id']);
 
-        if (!empty($req->password)) {
+        if ($req->filled('password')) {
             $data['password'] = Hash::make($req->password);
         }
 

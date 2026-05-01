@@ -5,13 +5,17 @@ use App\Http\Controllers\PeminjamanController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RPController;
 use App\Http\Controllers\UsersController;
+use App\Models\Roles;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    if (auth()->check()) return redirect()->route('daftar_buku');
-    return redirect()->route('login');
-});
+    if (!auth()->check()) {
+        return redirect()->route('login');
+    }
+
+    return redirect()->route(redirectPermissionRoutes(auth()->user()));
+})->name("index");
 
 // login routes
 Route::get('/login',[AuthController::class,'loginPage'])->name('login');

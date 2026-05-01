@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Peminjaman;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Validator;
 class BukuController extends Controller
 {
     public function daftarBukuPage() {
+        if (!auth()->check()) return redirect()->route('login');
+        if (!auth()->user()->hasPermission(Roles::DAFTAR_BUKU | Roles::ADMINISTRATOR)) return redirect()->route('index');
+
         $books = Buku::all();
         
         $borrowedBookIds = Peminjaman::where('user_id', Auth::id())
@@ -21,7 +25,10 @@ class BukuController extends Controller
     }
 
     public function manageBukuPage() {
-        $books = Buku::all(); 
+        if (!auth()->check()) return redirect()->route('login');
+        if (!auth()->user()->hasPermission(Roles::MANAJEMEN_BUKU_LIHAT | Roles::ADMINISTRATOR)) return redirect()->route('index');
+
+        $books = Buku::all();
         return view('admin.manage_buku', compact('books'));
     }
 

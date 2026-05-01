@@ -120,23 +120,13 @@
         @error('password_confirmation')
           <small class="text-danger">{{ $message }}</small>
         @enderror
-
         <button type="submit" class="btn btn-primary btn-block mt-3">
           Register
         </button>
       </form>
-
-      <div class="divider text-center my-3">
-        <span>or Sign Up with</span>
-      </div>
-
-      <div class="social-auth-links text-center">
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google mr-2"></i>
-          Google Account
-        </a>
-      </div>
-      <a href="{{ route('login') }}" class="text-center">I already have an account</a>
+      
+      <hr class="my-3 border-gray-300">
+      <a href="{{ route('login') }}" class="text-center"><-- Back to Login</a>
     </div>
     <!-- /.form-box -->
   </div><!-- /.card -->

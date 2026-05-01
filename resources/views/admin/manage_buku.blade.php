@@ -69,7 +69,7 @@
                 <tbody>
                   @foreach ($books as $book)
                   <tr id="{{ $book->id }}">
-                    <td><img width="200" height="300" style="object-fit: cover;" src="/cover_buku/{{ $book->cover_buku }}"></td>
+                    <td><img width="100" height="150" style="object-fit: cover;" src="/cover_buku/{{ $book->cover_buku }}"></td>
                     <td>{{ $book->nama_buku }}</td>
                     <td>{{ $book->stok }}</td>
                     <td>

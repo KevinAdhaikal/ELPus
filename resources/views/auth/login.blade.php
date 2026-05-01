@@ -72,20 +72,8 @@
         @enderror
         <br>
         <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+        <hr class="my-3 border-gray-300">
       </form>
-
-      <div class="divider text-center my-3">
-        <span>or Login with</span>
-      </div>
-
-      <div class="social-auth-links text-center mt-2 mb-3">
-        <a href="#" class="btn btn-block btn-primary">
-          <i class="fab fa-facebook mr-2"></i> Sign in using Facebook
-        </a>
-        <a href="#" class="btn btn-block btn-danger">
-          <i class="fab fa-google-plus mr-2"></i> Sign in using Google+
-        </a>
-      </div>
       <!-- /.social-auth-links -->
 
       <p class="mb-1">

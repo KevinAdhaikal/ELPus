@@ -321,6 +321,7 @@ async function edit_user(id) {
         })
     }
 
+    console.log(role.val());
     let res = await fetch("/admin/user", {
         method: "PATCH",
         headers: {

@@ -23,7 +23,7 @@ return new class extends Migration
             $table->date('tanggal_kembali')->nullable();
 
             // status
-            $table->enum('status', ['dipinjam', 'telat', 'dikembalikan'])->default('dipinjam');
+            $table->enum('status', ['dipinjam', 'dikembalikan'])->default('dipinjam');
             
             // denda
             $table->integer('denda')->default(0);

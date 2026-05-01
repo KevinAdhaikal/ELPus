@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Validator;
 class RPController extends Controller
 {
     public function rpPage() {
+        if (!auth()->check()) return redirect()->route('login');
+        if (!auth()->user()->hasPermission(Roles::ADMINISTRATOR)) return redirect()->route('index');
+
         $roles = Roles::all();
         return view('admin.rp', compact('roles'));
     }

@@ -4,12 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Peminjaman;
+use App\Models\Roles;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PeminjamanController extends Controller
 {
     public function listPeminjamanPage() {
+        if (!auth()->check()) return redirect()->route('login');
+        if (!auth()->user()->hasPermission(Roles::PINJAM_LIHAT_SENDIRI | Roles::ADMINISTRATOR)) return redirect()->route('index');
+        
         $pinjamans = Peminjaman::with('book')
         ->where('user_id', auth()->id())
         ->get();
@@ -18,6 +22,9 @@ class PeminjamanController extends Controller
     }
 
     public function adminPeminjamanPage() {
+        if (!auth()->check()) return redirect()->route('login');
+        if (!auth()->user()->hasPermission(Roles::PINJAM_LIHAT_SEMUA | Roles::ADMINISTRATOR)) return redirect()->route('index');
+
         $pinjamans = Peminjaman::with('user')->get();
         return view('admin.peminjaman', compact('pinjamans'));
     }

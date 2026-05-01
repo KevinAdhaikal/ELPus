@@ -93,7 +93,10 @@ function pinjam_buku(ev, id, close_modal = 0) {
 
                 if (ev) ev.disabled = true;
                 if (close_modal) buku_modal.modal("hide");
-                daftar_buku_table.cell("#" + id, 2).data(new Intl.NumberFormat("id-ID").format(res_json.stok)).draw();
+                daftar_buku_table.cell("#" + id, 2).data(new Intl.NumberFormat("id-ID").format(res_json.stok));
+                daftar_buku_table.cell("#" + id, 3).data(`<span class="badge badge-pill badge-primary px-2 py-2" style="font-size: 13px;">
+                          Dipinjam
+                        </span>`).draw();
             }
             else {
                 const res_json = await res.json();

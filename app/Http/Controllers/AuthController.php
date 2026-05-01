@@ -14,12 +14,15 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller {
     public function loginPage() {
+        if (auth()->check()) return redirect()->route('index');
         return view('auth.login');
     }
     public function registerPage() {
+        if (auth()->check()) return redirect()->route('index');
         return view('auth.register');
     }
     public function forgotPasswordPage() {
+        if (auth()->check()) return redirect()->route('index');
         return view("auth.forgot_password");
     }
     
@@ -40,7 +43,7 @@ class AuthController extends Controller {
         ];
 
         if(Auth::attempt($credentials)) {
-            return redirect('/');
+            return redirect()->route("utama");
         }
 
         return redirect('login')->with('error','Username / Email or Password is incorrect');

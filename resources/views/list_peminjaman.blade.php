@@ -69,20 +69,24 @@
                   <tr id="{{ $pinjaman->id }}">
                       <td><img width="100" height="150" style="object-fit: cover;" src="/cover_buku/{{ $pinjaman->book->cover_buku }}"></td>
                       <td>
+                        @if ($pinjaman->isLate())
+                        <span class="badge badge-pill badge-danger px-2 py-2" style="font-size: 13px;">
+                              Telat
+                          </span>
+                        @else
                           @php
                               $status = strtolower($pinjaman->status);
 
                               $badgeClass = match($status) {
                                   'dipinjam' => 'badge-primary',
-                                  'telat' => 'badge-danger',
                                   'dikembalikan' => 'badge-success',
                                   default => 'badge-secondary'
                               };
                           @endphp
-
                           <span class="badge badge-pill {{ $badgeClass }} px-2 py-2" style="font-size: 13px;">
                               {{ ucfirst($status) }}
                           </span>
+                        @endif
                       </td>
                       <td>{{ $pinjaman->tanggal_pinjam->format('d M Y H:i:s') ?? "Tidak Ada" }}</td>
                       <td>{{ $pinjaman->tanggal_jatuh_tempo->format('d M Y H:i:s') ?? "Tidak Ada"}}</td>

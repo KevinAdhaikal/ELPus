@@ -96,9 +96,8 @@
           </div>
         </form>
       @endif
-      <p class="mt-3 mb-1">
-        <a href="{{ route('login') }}"><-- Back to Login</a>
-      </p>
+      <hr class="my-3 border-gray-300">
+      <a href="{{ route('login') }}"><-- Back to Login</a>
     </div>
     <!-- /.login-card-body -->
   </div>

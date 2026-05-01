@@ -39,9 +39,6 @@ use App\Models\Roles;
       @if (auth()->user()->hasPermission(ROLES::ADMINISTRATOR | ROLES::MANAJEMEN_BUKU_LIHAT | ROLES::PINJAM_LIHAT_SEMUA))
       <li class="section_check">
         <ul class="nav nav-pills nav-sidebar flex-column">
-          <li class="nav-item">
-            <hr style="border-color: rgba(255,255,255,0.1); margin: 8px 0;">
-          </li>
           <li class="nav-header">ADMIN</li>
           @if (auth()->user()->hasPermission(ROLES::ADMINISTRATOR | ROLES::MANAJEMEN_BUKU_LIHAT))
           <li class="nav-item">

@@ -86,6 +86,7 @@
                   <th>Nama Peminjam</th>
                   <th>Tanggal Pinjam</th>
                   <th>Tanggal Kembali</th>
+                  <th>Status</th>
                   <th>Action</th>
                 </thead>
                 <tbody>
@@ -95,6 +96,26 @@
                       <td>{{ $pinjaman->user->full_name }}</td>
                       <td>{{ $pinjaman->tanggal_pinjam->format('d M Y H:i:s') }}</td>
                       <td>{{ $pinjaman->tanggal_kembali ? $pinjaman->tanggal_kembali->format('d M Y H:i:s') : "Belum Dikembalikan" }}</td>
+                      <td>
+                        @if ($pinjaman->isLate())
+                        <span class="badge badge-pill badge-danger px-2 py-2" style="font-size: 13px;">
+                              Telat
+                          </span>
+                        @else
+                          @php
+                              $status = strtolower($pinjaman->status);
+
+                              $badgeClass = match($status) {
+                                  'dipinjam' => 'badge-primary',
+                                  'dikembalikan' => 'badge-success',
+                                  default => 'badge-secondary'
+                              };
+                          @endphp
+                          <span class="badge badge-pill {{ $badgeClass }} px-2 py-2" style="font-size: 13px;">
+                              {{ ucfirst($status) }}
+                          </span>
+                        @endif
+                      </td>
                       <td>
                         <center>
                           <button type="button" class="text-right btn btn-primary action_view" value="{{ $pinjaman->id }}"><i class="fa fa-eye"></i> Lihat</button>
