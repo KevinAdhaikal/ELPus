@@ -26,7 +26,7 @@ class BukuController extends Controller
         $books = Buku::all();
         
         $borrowedBookIds = Peminjaman::where('user_id', $user->id)
-            ->where('status', 'dipinjam') // 🔥 ini penting
+            ->where('status', 'dipinjam')
             ->pluck('book_id')
             ->toArray();
 
